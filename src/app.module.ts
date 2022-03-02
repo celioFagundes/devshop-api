@@ -8,7 +8,8 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { ProductModule } from './product/product.module'
 import { BrandModule } from './brand/brand.module'
-import { graphqlUploadExpress } from 'graphql-upload'
+import { UserModule } from './user/user.module'
+import { CoreModule } from './core/core.module'
 
 @Module({
   imports: [
@@ -35,10 +36,13 @@ import { graphqlUploadExpress } from 'graphql-upload'
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
+      context: ({ req, res }) => ({ req, res }),
     }),
+    CoreModule,
     CategoryModule,
     ProductModule,
     BrandModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
