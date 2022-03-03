@@ -13,4 +13,12 @@ export class ProductPublic {
   description: string
   @Field({ nullable: true })
   category: CategoryPublic
+  @Field({ nullable: true })
+  sku: string
+  @Field({ nullable: true })
+  price: number
+  @Field({ nullable: true })
+  weight: number
+  @Field(type => [String!], { nullable: true })
+  images: string[]
 }

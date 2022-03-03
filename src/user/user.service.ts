@@ -69,19 +69,22 @@ export class UserService {
     FileSystemDirectoryReader
   }
   async getRefreshToken(id: string): Promise<AuthToken> {
-    const refreshToken = await this.authRepository.findOne(id, {
-      relations: ['user'],
-    })
+    const refreshToken = await this.authRepository.findOne(
+      { id, active: true },
+      {
+        relations: ['user'],
+      },
+    )
     refreshToken.lastUsedAt = new Date()
     await this.authRepository.save(refreshToken)
     return refreshToken
   }
-  async invalidateRefresjToken(id: string): Promise<AuthToken> {
+  async invalidateRefreshToken(id: string): Promise<boolean> {
     const refreshToken = await this.authRepository.findOne(id, {
       relations: ['user'],
     })
     refreshToken.active = false
     await this.authRepository.save(refreshToken)
-    return refreshToken
+    return true
   }
 }

@@ -4,9 +4,9 @@ import { AuthGuard } from 'src/utils/jwt-auth.guard'
 import { ProductPublic } from './dto/product'
 import { ProductCreateInput } from './dto/product-create.input'
 import { ProductUpdateInput } from './dto/product-update.input'
-import { Product } from './product.entity'
 import { ProductMapper } from './product.mapper'
 import { ProductService } from './product.service'
+import { GraphQLUpload, FileUpload } from 'graphql-upload'
 
 @Resolver(of => ProductPublic)
 export class ProductResolver {
@@ -51,5 +51,28 @@ export class ProductResolver {
   @Mutation(returns => Boolean, { name: 'panelDeleteProduct' })
   async deleteProduct(@Args('id') input: string): Promise<boolean> {
     return this.productService.delete(input)
+  }
+  @UseGuards(AuthGuard)
+  @Mutation(returns => Boolean, { name: 'panelUploadProductImage' })
+  async uploadProductImage(
+    @Args('id') id: string,
+    @Args({ name: 'file', type: () => GraphQLUpload })
+    file: FileUpload,
+  ): Promise<boolean> {
+    const { createReadStream, filename, mimetype } = await file
+    return await this.productService.uploadProductImage(
+      id,
+      createReadStream,
+      filename,
+      mimetype,
+    )
+  }
+  @UseGuards(AuthGuard)
+  @Mutation(returns => Boolean, { name: 'panelDeleteProductImage' })
+  async deleteProductImage(
+    @Args('id') id: string,
+    @Args('url') url: string,
+  ): Promise<boolean> {
+    return this.productService.removeProductImage(id, url)
   }
 }

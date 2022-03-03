@@ -14,6 +14,10 @@ type Product {
   slug: String
   description: String
   category: Category
+  sku: String
+  price: Float
+  weight: Float
+  images: [String!]
 }
 
 type Brand {
@@ -39,6 +43,7 @@ type AuthSession {
   id: String!
   userAgent: String
   lastUsedAt: DateTime
+  active: Boolean
 }
 
 """
@@ -70,6 +75,8 @@ type Mutation {
   panelCreateProduct(input: ProductCreateInput!): Product!
   panelUpdateProduct(input: ProductUpdateInput!): Product!
   panelDeleteProduct(id: String!): Boolean!
+  panelUploadProductImage(id: String!, file: Upload!): Boolean!
+  panelDeleteProductImage(id: String!, url: String!): Boolean!
   panelCreateBrand(input: BrandCreateInput!): Brand!
   panelUpdateBrand(input: BrandUpdateInput!): Brand!
   panelDeleteBrand(id: String!): Boolean!
@@ -81,6 +88,7 @@ type Mutation {
   panelDeleteUser(id: String!): Boolean!
   auth(input: AuthUserInput!): AuthToken!
   accessToken(refreshToken: String!): String!
+  panelInvalidateUserSession(id: String!): Boolean!
 }
 
 input CategoryCreateInput {
@@ -99,6 +107,21 @@ input ProductCreateInput {
   slug: String!
   description: String!
   category: String!
+  sku: String
+  price: Float
+  weight: Float
+  stock: Int!
+  optionNames: [String!]
+  variations: [VariationInput!]
+}
+
+input VariationInput {
+  optionName1: String!
+  optionName2: String!
+  sku: String!
+  price: Float!
+  weight: Float!
+  stock: Int!
 }
 
 input ProductUpdateInput {
@@ -108,6 +131,9 @@ input ProductUpdateInput {
   description: String!
   category: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input BrandCreateInput {
   name: String!
@@ -119,9 +145,6 @@ input BrandUpdateInput {
   name: String!
   slug: String!
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 input UserCreateInput {
   name: String!

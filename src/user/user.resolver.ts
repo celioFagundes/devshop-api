@@ -128,4 +128,9 @@ export class UserResolver {
     }
     return null
   }
+  @UseGuards(AuthGuard)
+  @Mutation(returns => Boolean, { name: 'panelInvalidateUserSession' })
+  async invalidateUserSession(@Args('id') input: string): Promise<boolean> {
+    return this.userService.invalidateRefreshToken(input)
+  }
 }

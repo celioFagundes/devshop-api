@@ -8,4 +8,6 @@ export class AuthSession {
   userAgent: string
   @Field({ nullable: true })
   lastUsedAt: Date
+  @Field({ nullable: true })
+  active: boolean
 }

@@ -13,6 +13,12 @@ export class ProductMapper {
     const category = new Category()
     category.id = input.category
     entity.category = category
+    entity.sku = input.sku
+    entity.price = input.price
+    entity.weight = input.weight
+    entity.stock = input.stock
+    entity.optionNames = input.optionNames
+    entity.variations = input.variations
     return entity
   }
   public static fromUpdateToEntity(input: ProductUpdateInput): Product {
@@ -24,6 +30,7 @@ export class ProductMapper {
     const category = new Category()
     category.id = input.category
     entity.category = category
+    entity.category = category
     return entity
   }
   public static fromEntityToPublic(entity: Product): ProductPublic {
@@ -33,6 +40,7 @@ export class ProductMapper {
     product.slug = entity.slug
     product.description = entity.description
     product.category = entity.category
+    product.images = entity.images
     return product
   }
 }
