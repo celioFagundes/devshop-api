@@ -19,16 +19,11 @@ export class ProductCreateInput {
   @Field()
   @IsUUID()
   category: string
-  @Field({ nullable: true })
-  sku: string
-  @Field(type => Float, { nullable: true })
-  price: number
-  @Field(type => Float, { nullable: true })
-  weight: number
-  @Field(type => Int)
-  stock: number
-  @Field(type => [String], { nullable: true })
-  optionNames: string[]
-  @Field(type => [VariationInput], { nullable: true })
+  @Field()
+  @IsUUID()
+  brand: string
+  @Field()
+  sizeType: string
+  @Field(type => [VariationInput]!)
   variations: VariationInput[]
 }

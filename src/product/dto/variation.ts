@@ -1,10 +1,10 @@
-import { Field, Float, InputType, Int } from '@nestjs/graphql'
-import { ColorInput } from './color.input'
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql'
+import { Color } from './color'
 
-@InputType()
-export class VariationInput {
-  @Field(type => ColorInput)
-  color: ColorInput
+@ObjectType('VariationPublic')
+export class VariationPublic {
+  @Field(type => Color)
+  color: Color
   @Field()
   size: string
   @Field(type => [String!])

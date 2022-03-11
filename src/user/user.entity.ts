@@ -8,6 +8,15 @@ import {
 } from 'typeorm'
 import * as bcrypt from 'bcrypt'
 import { AuthToken } from './auth-token.entity'
+import { registerEnumType } from '@nestjs/graphql'
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
+registerEnumType(UserRole, {
+  name: 'UserRole',
+})
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -22,8 +31,13 @@ export class User {
   @Column({ length: 450, nullable: false })
   password: string
 
-  @Column({ length: 450, nullable: false })
-  role: string
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+    nullable: false,
+  })
+  role: UserRole
 
   @Column({ type: 'timestamp', nullable: true })
   lastLogin: Date

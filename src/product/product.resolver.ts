@@ -17,6 +17,20 @@ export class ProductResolver {
     const products = await this.productService.getAll()
     return products.map(ProductMapper.fromEntityToPublic)
   }
+  @Query(returns => [ProductPublic], { name: 'getProductsByCategory' })
+  async getProductsByCategory(
+    @Args('categorySlug') categorySlug: string,
+  ): Promise<ProductPublic[]> {
+    const products = await this.productService.getByCategory(categorySlug)
+    return products.map(ProductMapper.fromEntityToPublic)
+  }
+  @Query(returns => [ProductPublic], { name: 'getProductsByBrand' })
+  async getProductsByBrand(
+    @Args('brandSlug') brandSlug: string,
+  ): Promise<ProductPublic[]> {
+    const products = await this.productService.getByBrand(brandSlug)
+    return products.map(ProductMapper.fromEntityToPublic)
+  }
   @Query(returns => ProductPublic, { name: 'getProductById' })
   async getProductById(@Args('id') id: string): Promise<ProductPublic> {
     return ProductMapper.fromEntityToPublic(
@@ -29,7 +43,6 @@ export class ProductResolver {
       await this.productService.getBySlug(slug),
     )
   }
-  @UseGuards(AuthGuard)
   @Mutation(returns => ProductPublic, { name: 'panelCreateProduct' })
   async createProduct(
     @Args('input') input: ProductCreateInput,

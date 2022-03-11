@@ -8,18 +8,6 @@ type Category {
   slug: String
 }
 
-type Product {
-  id: String
-  name: String
-  slug: String
-  description: String
-  category: Category
-  sku: String
-  price: Float
-  weight: Float
-  images: [String!]
-}
-
 type Brand {
   id: String
   name: String
@@ -27,11 +15,38 @@ type Brand {
   logo: String
 }
 
+type Color {
+  colorName: String!
+  colorCode: String!
+}
+
+type VariationPublic {
+  color: Color!
+  size: String!
+  voltage: [String!]!
+  sku: String!
+  price: Float!
+  weight: Float!
+  stock: Int!
+}
+
+type Product {
+  id: String
+  name: String
+  slug: String
+  description: String
+  category: Category
+  brand: Brand
+  variations: [VariationPublic!]
+  sizeType: String
+  images: [String!]
+}
+
 type User {
   id: String
   name: String
   email: String
-  role: String
+  role: String!
 }
 
 type AuthToken {
@@ -56,6 +71,8 @@ type Query {
   getCategoryById(id: String!): Category!
   getCategoryBySlug(slug: String!): Category!
   getAllProducts: [Product!]!
+  getProductsByCategory(categorySlug: String!): [Product!]!
+  getProductsByBrand(brandSlug: String!): [Product!]!
   getProductById(id: String!): Product!
   getProductBySlug(slug: String!): Product!
   getAllBrands: [Brand!]!
@@ -107,21 +124,24 @@ input ProductCreateInput {
   slug: String!
   description: String!
   category: String!
-  sku: String
-  price: Float
-  weight: Float
-  stock: Int!
-  optionNames: [String!]
-  variations: [VariationInput!]
+  brand: String!
+  sizeType: String!
+  variations: [VariationInput!]!
 }
 
 input VariationInput {
-  optionName1: String!
-  optionName2: String!
+  color: ColorInput!
+  size: String!
+  voltage: [String!]!
   sku: String!
   price: Float!
   weight: Float!
   stock: Int!
+}
+
+input ColorInput {
+  colorName: String!
+  colorCode: String!
 }
 
 input ProductUpdateInput {
@@ -130,6 +150,9 @@ input ProductUpdateInput {
   slug: String!
   description: String!
   category: String!
+  brand: String!
+  sizeType: String!
+  variations: [VariationInput!]!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -150,14 +173,19 @@ input UserCreateInput {
   name: String!
   password: String!
   email: String!
-  role: String!
+  role: UserRole!
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
 
 input UserUpdateInput {
   id: String!
   name: String!
   email: String!
-  role: String!
+  role: UserRole!
 }
 
 input UserChangePasswordInput {

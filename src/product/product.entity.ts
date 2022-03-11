@@ -1,9 +1,15 @@
+import { Brand } from 'src/brand/brand.entity'
 import { Category } from 'src/category/category.entity'
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 
+interface Color {
+  colorName: string
+  colorCode: string
+}
 interface ProductVariation {
-  optionName1: string
-  optionName2: string
+  color: Color
+  size: string
+  voltage: string[]
   sku: string
   price: number
   weight: number
@@ -28,24 +34,15 @@ export class Product {
     eager: true,
   })
   category: Category
+  @ManyToOne(type => Brand, brand => brand.id, {
+    eager: true,
+  })
+  brand: Brand
 
-  @Column({ type: 'jsonb', nullable: true })
-  optionNames: string[]
-
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ nullable: false })
+  sizeType: string
+  @Column({ type: 'jsonb', nullable: false })
   variations: ProductVariation[]
-
-  @Column({ length: 250, nullable: true })
-  sku: string
-
-  @Column({ nullable: true, type: 'money' })
-  price: number
-
-  @Column({ nullable: true, type: 'decimal' })
-  weight: number
-
-  @Column({ nullable: true, type: 'integer' })
-  stock: number
 
   @Column({ type: 'jsonb', nullable: true })
   images: string[]

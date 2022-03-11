@@ -61,12 +61,10 @@ export class UserService {
       authToken.user = user
       authToken.userAgent = userAgent
       const token = await this.authRepository.save(authToken)
-      console.log(token)
       return [user, token]
     } else {
       return [null, null]
     }
-    FileSystemDirectoryReader
   }
   async getRefreshToken(id: string): Promise<AuthToken> {
     const refreshToken = await this.authRepository.findOne(

@@ -1,8 +1,10 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { ArgsType, Field, InputType } from '@nestjs/graphql'
 import { IsEmail, Length, Validate } from 'class-validator'
+import { UserRole } from '../user.entity'
 import { UserEmailIsUnique } from '../validations/UserEmailIsUnique'
 
 @InputType()
+@ArgsType()
 export class UserCreateInput {
   @Field()
   @Length(3)
@@ -18,7 +20,6 @@ export class UserCreateInput {
   @Validate(UserEmailIsUnique)
   email: string
 
-  @Field()
-  @Length(3)
-  role: string
+  @Field(type => UserRole)
+  role: UserRole
 }

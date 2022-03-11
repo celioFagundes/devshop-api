@@ -4,16 +4,33 @@ import { S3 } from 'src/utils/s3'
 import { Repository } from 'typeorm'
 import { Product } from './product.entity'
 import * as sharp from 'sharp'
-
+import { Category } from 'src/category/category.entity'
+import { Brand } from '../brand/brand.entity'
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+    @InjectRepository(Brand)
+    private brandRepository: Repository<Brand>,
     private s3: S3,
   ) {}
   async getAll(): Promise<Product[]> {
     return this.productRepository.find()
+  }
+  async getByCategory(categorySlug: string): Promise<Product[]> {
+    const category = await this.categoryRepository.findOne({
+      where: [{ slug: categorySlug }],
+    })
+    return this.productRepository.find({ where: [{ category: category.id }] })
+  }
+  async getByBrand(brandSlug: string): Promise<Product[]> {
+    const brand = await this.brandRepository.findOne({
+      where: [{ slug: brandSlug }],
+    })
+    return this.productRepository.find({ where: [{ brand: brand.id }] })
   }
   async getById(id: string): Promise<Product> {
     return this.productRepository.findOne(id)
@@ -30,6 +47,9 @@ export class ProductService {
       slug: input.slug,
       description: input.description,
       category: input.category,
+      brand: input.brand,
+      sizeType: input.sizeType,
+      variations: input.variations,
     })
     return input
   }

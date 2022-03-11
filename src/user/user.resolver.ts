@@ -15,7 +15,7 @@ import { AuthToken } from './dto/auth'
 import { JwtService } from '@nestjs/jwt'
 import { AuthUserInput } from './dto/auth-user.input'
 import { UseGuards } from '@nestjs/common'
-import { AuthGuard } from '../utils/jwt-auth.guard'
+import { AuthGuard, AuthLogin } from '../utils/jwt-auth.guard'
 import { AuthUserId } from 'src/utils/jwt-user.decorator'
 import { UserChangePasswordInput } from './dto/user-change-password.input'
 import { AuthSession } from './dto/auth-session'
@@ -41,11 +41,14 @@ export class UserResolver {
   async getUserByEmail(@Args('email') email: string): Promise<UserPublic> {
     return await this.userService.getByEmail(email)
   }
-  @UseGuards(AuthGuard)
+
+  @UseGuards(AuthLogin)
   @Query(returns => UserPublic, { name: 'panelGetMe' })
   async getMe(@AuthUserId() id: string): Promise<UserPublic> {
+    console.log('auth id->', id)
     return await this.userService.getById(id)
   }
+  @UseGuards(AuthGuard)
   @Query(returns => [AuthSession], { name: 'panelGetAllUserSessions' })
   async panelGetAllUserSessions(
     @Args('id') id: string,
