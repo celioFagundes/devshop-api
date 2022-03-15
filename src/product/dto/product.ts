@@ -22,5 +22,7 @@ export class ProductPublic {
   @Field({ nullable: true })
   sizeType: string
   @Field(type => [String!], { nullable: true })
+  voltage: string[]
+  @Field(type => [String!], { nullable: true })
   images: string[]
 }

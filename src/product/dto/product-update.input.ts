@@ -27,6 +27,8 @@ export class ProductUpdateInput {
   brand: string
   @Field()
   sizeType: string
+  @Field(type => [String!])
+  voltage: string[]
   @Field(type => [VariationInput]!)
   variations: VariationInput[]
 }

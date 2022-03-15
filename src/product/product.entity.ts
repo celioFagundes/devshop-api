@@ -9,7 +9,6 @@ interface Color {
 interface ProductVariation {
   color: Color
   size: string
-  voltage: string[]
   sku: string
   price: number
   weight: number
@@ -41,6 +40,8 @@ export class Product {
 
   @Column({ nullable: false })
   sizeType: string
+  @Column('text', { array: true, default: {}, nullable: true })
+  voltage: string[]
   @Column({ type: 'jsonb', nullable: false })
   variations: ProductVariation[]
 

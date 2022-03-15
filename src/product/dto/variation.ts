@@ -7,8 +7,6 @@ export class VariationPublic {
   color: Color
   @Field()
   size: string
-  @Field(type => [String!])
-  voltage: string[]
   @Field()
   sku: string
   @Field(type => Float)

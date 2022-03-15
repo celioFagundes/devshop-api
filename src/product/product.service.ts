@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { S3 } from 'src/utils/s3'
-import { Repository } from 'typeorm'
+import { getRepository, Repository } from 'typeorm'
 import { Product } from './product.entity'
 import * as sharp from 'sharp'
 import { Category } from 'src/category/category.entity'
@@ -18,8 +18,9 @@ export class ProductService {
     private s3: S3,
   ) {}
   async getAll(): Promise<Product[]> {
-    return this.productRepository.find()
+    return this.productRepository.find({})
   }
+
   async getByCategory(categorySlug: string): Promise<Product[]> {
     const category = await this.categoryRepository.findOne({
       where: [{ slug: categorySlug }],
@@ -49,6 +50,7 @@ export class ProductService {
       category: input.category,
       brand: input.brand,
       sizeType: input.sizeType,
+      voltage: input.voltage,
       variations: input.variations,
     })
     return input
@@ -74,7 +76,7 @@ export class ProductService {
     if (!product.images) {
       product.images = []
     }
-    const stream = createReadStream().pipe(sharp().resize(300))
+    const stream = createReadStream().pipe(sharp().resize({ width: 500 }))
     const url = await this.s3.upload(
       stream,
       mimetype,

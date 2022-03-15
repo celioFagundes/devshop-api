@@ -7,8 +7,6 @@ export class VariationInput {
   color: ColorInput
   @Field()
   size: string
-  @Field(type => [String!])
-  voltage: string[]
   @Field()
   sku: string
   @Field(type => Float)

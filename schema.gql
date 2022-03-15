@@ -23,7 +23,6 @@ type Color {
 type VariationPublic {
   color: Color!
   size: String!
-  voltage: [String!]!
   sku: String!
   price: Float!
   weight: Float!
@@ -39,6 +38,7 @@ type Product {
   brand: Brand
   variations: [VariationPublic!]
   sizeType: String
+  voltage: [String!]
   images: [String!]
 }
 
@@ -126,13 +126,13 @@ input ProductCreateInput {
   category: String!
   brand: String!
   sizeType: String!
+  voltage: [String!]!
   variations: [VariationInput!]!
 }
 
 input VariationInput {
   color: ColorInput!
   size: String!
-  voltage: [String!]!
   sku: String!
   price: Float!
   weight: Float!
@@ -152,6 +152,7 @@ input ProductUpdateInput {
   category: String!
   brand: String!
   sizeType: String!
+  voltage: [String!]!
   variations: [VariationInput!]!
 }
 

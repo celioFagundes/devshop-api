@@ -17,6 +17,7 @@ export class ProductMapper {
     brand.id = input.brand
     entity.brand = brand
     entity.sizeType = input.sizeType
+    entity.voltage = input.voltage
     entity.variations = input.variations
     return entity
   }
@@ -33,6 +34,7 @@ export class ProductMapper {
     entity.brand = brand
     entity.category = category
     entity.sizeType = input.sizeType
+    entity.voltage = input.voltage
     entity.variations = input.variations
     return entity
   }
@@ -46,6 +48,7 @@ export class ProductMapper {
     product.brand = entity.brand
     product.images = entity.images
     product.sizeType = entity.sizeType
+    product.voltage = entity.voltage
     product.variations = entity.variations
     return product
   }
